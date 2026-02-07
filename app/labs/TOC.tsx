@@ -31,7 +31,9 @@ export default function TOC() {
         </NavLink>
       </NavItem>
       <NavItem>
-        <NavLink href="https://github.com/kebrcic">My GitHub</NavLink>
+        <NavLink href="https://github.com/kebrcic/kanvas-next-js">
+          My GitHub
+        </NavLink>
       </NavItem>
     </Nav>
   );
