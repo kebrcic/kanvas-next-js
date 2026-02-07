@@ -1,0 +1,13 @@
+#teconsent{
+    position: relative;
+    top: 15px;
+    padding-left: 60px !important;
+}
+.nu-global footer.bg-black{
+    background-color:	#111 !important;
+    position: relative;
+    z-index: 2;
+}
+#nu__cookiewarning{
+    display: none !important;
+}

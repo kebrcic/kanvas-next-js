@@ -1,0 +1,54 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body * {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@media (min-width: 768px) {
+  #wd-kambaz .wd-main-content-offset {
+    padding-left: 140px !important;
+  }
+}
+
+.list-group.wd > .list-group-item.active {
+  color: black;
+  background-color: white;
+  border-left: 3px solid black !important;
+}
+
+.btn-secondary {
+  --bs-btn-color: #000 !important;
+  --bs-btn-bg: #c7cdd1 !important;
+  --bs-btn-border-color: #c7cdd1 !important;
+  --bs-btn-hover-color: #fff !important;
+}
+.bg-secondary {
+  --bs-secondary-rgb: 199, 205, 209;
+}
+.list-group-item {
+  --bs-list-group-border-color: gray;
+}
+.wd-lesson,
+.wd-assignment {
+  border-left: 3px solid green !important;
+}
+
+.styled-input {
+  /* Visual styling from the image */
+  border: 1px solid #161515;
+  border-radius: 20px;
+  background-color: #c7cdd1;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+  padding: 1px 4px 3px;
+  text-align: center; /* Centers the "40% of Total" text */
+  outline: none; /* Removes the default blue focus glow */
+  width: fit-content; /* Makes the input only as wide as its content/value */
+
+  /* Prevents user from typing in this specific display field */
+  cursor: default;
+  font-size: 0.85rem;
+}

@@ -8,7 +8,7 @@ export default function AccountLayout({
       <table>
         <tbody>
           <tr>
-            <td valign="top">
+            <td valign="top" className="p-0">
               {" "}
               <AccountNavigation />{" "}
             </td>
