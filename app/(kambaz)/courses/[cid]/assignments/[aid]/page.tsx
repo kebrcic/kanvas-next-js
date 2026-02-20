@@ -1,3 +1,4 @@
+'use client';
 import {
   FormLabel,
   FormControl,
@@ -8,8 +9,15 @@ import {
   Col,
   FormCheck,
 } from "react-bootstrap";
+import * as db from '../../../../database';
+import { useParams } from "next/navigation";
+import Link from "next/link";
 
 export default function AssignmentEditor() {
+  const{cid} = useParams();
+  const {aid} = useParams();
+  const assignments = db.assignments;
+  const currAssignment = assignments.find((assignment) => assignment._id === aid)
   return (
     <Container id="wd-assignments-editor" className="p-4">
       {/* Assignment Name Section */}
@@ -17,7 +25,7 @@ export default function AssignmentEditor() {
         <h6>
           <FormLabel htmlFor="wd-name">Assignment Name</FormLabel>
         </h6>
-        <FormControl id="wd-name" defaultValue="A1 - ENV + HTML" />
+        <FormControl id="wd-name" defaultValue={currAssignment?.title} />
       </div>
 
       {/* Description Section */}
@@ -26,12 +34,7 @@ export default function AssignmentEditor() {
           as="textarea"
           id="wd-description"
           rows={5}
-          defaultValue={`The assignment is available online Submit a link to the landing page of your Web application running on Netlify. The landing page should include the following:
-Your full name and section
-Links to each of the lab assignments
-Link to the Kanbas application
-Links to all relevant source code repositories
-The Kanbas application should include a link to navigate back to the landing page.`}
+          defaultValue={currAssignment?.description}
         />
       </div>
 
@@ -44,7 +47,7 @@ The Kanbas application should include a link to navigate back to the landing pag
           Points
         </FormLabel>
         <Col sm={9}>
-          <FormControl type="number" defaultValue={100} />
+          <FormControl type="number" defaultValue={currAssignment?.points} />
         </Col>
       </Row>
 
@@ -142,7 +145,7 @@ The Kanbas application should include a link to navigate back to the landing pag
           Due
         </FormLabel>
         <Col sm={9}>
-          <FormControl type="date" defaultValue="2024-05-13" id="wd-due-date" />
+          <FormControl type="date" defaultValue={currAssignment?.due_date} id="wd-due-date" />
         </Col>
       </Row>
 
@@ -155,7 +158,7 @@ The Kanbas application should include a link to navigate back to the landing pag
           <FormControl
             type="date"
             id="wd-from-date"
-            defaultValue="2024-05-06"
+            defaultValue={currAssignment?.available_date}
           />
         </Col>
         <FormLabel column sm={1} className="text-sm-end">
@@ -165,7 +168,7 @@ The Kanbas application should include a link to navigate back to the landing pag
           <FormControl
             type="date"
             id="wd-until-date"
-            defaultValue="2024-05-20"
+            defaultValue=""
           />
         </Col>
       </Row>
@@ -176,9 +179,13 @@ The Kanbas application should include a link to navigate back to the landing pag
 
       {/* Buttons at the bottom right */}
       <div className="d-flex justify-content-end gap-2">
+        <Link href={`/courses/${cid}/assignments`}>
         <Button variant="light">Cancel</Button>
+        </Link>
         {/* Using 'danger' variant to match the red 'Save' button in the image */}
+        <Link href={`/courses/${cid}/assignments`}>
         <Button variant="danger">Save</Button>
+        </Link>
       </div>
     </Container>
   );
