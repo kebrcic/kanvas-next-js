@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import {
   FormLabel,
   FormControl,
@@ -9,15 +9,15 @@ import {
   Col,
   FormCheck,
 } from "react-bootstrap";
-import * as db from '../../../../database';
+import * as db from "../../../../database";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 
 export default function AssignmentEditor() {
-  const{cid} = useParams();
-  const {aid} = useParams();
+  const { cid } = useParams();
+  const { aid } = useParams();
   const assignments = db.assignments;
-  const currAssignment = assignments.find((assignment) => assignment._id === aid)
+  const currAssignment = assignments.find((assignment) => assignment._id === aid);
   return (
     <Container id="wd-assignments-editor" className="p-4">
       {/* Assignment Name Section */}
@@ -158,18 +158,14 @@ export default function AssignmentEditor() {
           <FormControl
             type="date"
             id="wd-from-date"
-            defaultValue={currAssignment?.available_date}
+            defaultValue={currAssignment?.available_from_date}
           />
         </Col>
         <FormLabel column sm={1} className="text-sm-end">
           Until
         </FormLabel>
         <Col sm={4}>
-          <FormControl
-            type="date"
-            id="wd-until-date"
-            defaultValue=""
-          />
+          <FormControl type="date" id="wd-until-date" defaultValue="" />
         </Col>
       </Row>
 
@@ -180,11 +176,11 @@ export default function AssignmentEditor() {
       {/* Buttons at the bottom right */}
       <div className="d-flex justify-content-end gap-2">
         <Link href={`/courses/${cid}/assignments`}>
-        <Button variant="light">Cancel</Button>
+          <Button variant="light">Cancel</Button>
         </Link>
         {/* Using 'danger' variant to match the red 'Save' button in the image */}
         <Link href={`/courses/${cid}/assignments`}>
-        <Button variant="danger">Save</Button>
+          <Button variant="danger">Save</Button>
         </Link>
       </div>
     </Container>
