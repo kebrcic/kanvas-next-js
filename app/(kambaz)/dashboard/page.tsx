@@ -4,7 +4,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import * as db from "../database";
+
 import {
   Row,
   Col,
@@ -35,7 +35,7 @@ export default function Dashboard() {
     number: "New Number",
     startDate: "2023-09-10",
     endDate: "2023-12-15",
-    image: "/images/reactjs.jpg",
+    image: "bg2.jpg",
     description: "New Description",
   });
 
