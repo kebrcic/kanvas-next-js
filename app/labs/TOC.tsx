@@ -47,7 +47,7 @@ export default function TOC() {
         <NavLink
           href="/labs/lab4"
           as={Link}
-          className={`nav-link ${pathname.endsWith("lab3") ? "active" : ""}`}
+          className={`nav-link ${pathname.endsWith("lab4") ? "active" : ""}`}
         >
           Lab 4
         </NavLink>
@@ -58,10 +58,7 @@ export default function TOC() {
         </NavLink>
       </NavItem>
       <NavItem>
-        <NavLink
-          id="wd-github"
-          href="https://github.com/kebrcic/kanvas-next-js"
-        >
+        <NavLink id="wd-github" href="https://github.com/kebrcic/kanvas-next-js">
           My GitHub
         </NavLink>
       </NavItem>
