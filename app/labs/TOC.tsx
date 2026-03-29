@@ -67,8 +67,18 @@ export default function TOC() {
         </NavLink>
       </NavItem>
       <NavItem>
-        <NavLink id="wd-github" href="https://github.com/kebrcic/kanvas-next-js">
-          My GitHub
+        <NavLink id="wd-github-frontend" href="https://github.com/kebrcic/kanvas-next-js">
+          GitHub Frontend
+        </NavLink>
+      </NavItem>
+      <NavItem>
+        <NavLink id="wd-github-backend" href="https://github.com/kebrcic/kambaz-node-server-app">
+          GitHub Backend
+        </NavLink>
+      </NavItem>
+      <NavItem>
+        <NavLink id="wd-server-render" href="https://kambaz-node-server-app-mnjr.onrender.com">
+          Render Server
         </NavLink>
       </NavItem>
     </Nav>
