@@ -28,6 +28,7 @@ export default function WorkingWithObjectsAsynchronously() {
         onChange={(e) => setAssignment({ ...assignment, title: e.target.value })}
       />
       <FormControl
+        as="textarea"
         rows={3}
         defaultValue={assignment.description}
         className="mb-2"
