@@ -9,11 +9,12 @@ import AssignmentControlButtons from "./AssignmentControlButtons";
 import { useParams } from "next/navigation";
 import { RootState } from "../../../store";
 import { useDispatch, useSelector } from "react-redux";
-import { addAssignment, deleteAssignment, updateAssignment } from "./reducer";
-import { useState } from "react";
+import { setAssignments } from "./reducer";
+import { useState, useEffect } from "react";
 import AssignmentEditor from "./AssignmentEditor";
 import ConfirmModal from "./confirmModal";
 import SingleAssignmentControlButton from "./SingleAssignmentControlButton";
+import * as client from "../../client";
 
 export interface AssignmentData {
   title: string;
@@ -46,8 +47,22 @@ export default function Assignments() {
   const currAssignments = assignments.filter((asgmt: any) => asgmt.course === cid);
   const dispatch = useDispatch();
 
-  const handleAddAssignment = () => {
-    dispatch(addAssignment({ ...formData, course: cid }));
+  const fetchAssignments = async () => {
+    const assignments = await client.findAssignmentsForCourse(cid as string);
+    dispatch(setAssignments(assignments));
+  };
+  useEffect(() => {
+    fetchAssignments();
+  }, []);
+
+  const handleAddAssignment = async () => {
+    if (!cid) return;
+    const newAssignment = { ...formData, course: cid };
+    const assignment = await client.createAssignmentForCourse(
+      Array.isArray(cid) ? cid[0] : cid,
+      newAssignment,
+    );
+    dispatch(setAssignments([...assignments, assignment]));
   };
 
   const handleEditClick = (assignment: any) => {
@@ -66,8 +81,11 @@ export default function Assignments() {
     });
   };
 
-  const handleUpdateAssignment = () => {
-    dispatch(updateAssignment({ ...formData }));
+  const handleUpdateAssignment = async () => {
+    await client.updateAssignment(formData);
+    dispatch(setAssignments(
+      assignments.map((a: any) => (a._id === (formData as any)._id ? formData : a)),
+    ));
     resetFormData();
     setShow(false);
   };
@@ -116,8 +134,9 @@ export default function Assignments() {
   const handleClose = () => setShow(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const confirmDelete = () => {
-    dispatch(deleteAssignment(formData));
+  const confirmDelete = async () => {
+    await client.deleteAssignment((formData as any)._id);
+    dispatch(setAssignments(assignments.filter((a: any) => a._id !== (formData as any)._id)));
     setShowDeleteModal(false);
     resetFormData();
   };
