@@ -47,6 +47,7 @@ export default function WorkingWithArraysAsynchronously() {
   const [errorMessage, setErrorMessage] = useState(null);
   const updateTodo = async (todo: any) => {
     try {
+      await client.updateTodo(todo);
       setTodos(todos.map((t) => (t.id === todo.id ? todo : t)));
     } catch (error: any) {
       setErrorMessage(error.response.data.message);
