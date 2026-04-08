@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-const initialState = {
+const initialState: { currentUser: any } = {
   currentUser: null,
 };
 const accountSlice = createSlice({
