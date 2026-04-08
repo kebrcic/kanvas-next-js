@@ -259,18 +259,9 @@ export default function PeopleTable({
               ) : (
                 <>
                   <td className="wd-full-name text-nowrap">
-                    <span
-                      className="text-decoration-none"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => {
-                        setShowDetails(true);
-                        setShowUserId(user._id);
-                      }}
-                    >
-                      <FaUserCircle className="me-2 fs-1 text-secondary" />
-                      <span className="wd-first-name">{user.firstName}</span>{" "}
-                      <span className="wd-last-name">{user.lastName}</span>
-                    </span>
+                    <FaUserCircle className="me-2 fs-1 text-secondary" />
+                    <span className="wd-first-name">{user.firstName}</span>{" "}
+                    <span className="wd-last-name">{user.lastName}</span>
                   </td>
                   <td className="wd-login-id">{user.loginId}</td>
                   <td className="wd-section">{user.section}</td>
