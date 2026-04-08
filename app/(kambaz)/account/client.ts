@@ -48,7 +48,7 @@ export const findUserById = async (id: string) => {
 };
 
 export const deleteUser = async (userId: string) => {
-  const response = await axios.delete(`${USERS_API}/${userId}`);
+  const response = await axiosWithCredentials.delete(`${USERS_API}/${userId}`);
   return response.data;
 };
 
