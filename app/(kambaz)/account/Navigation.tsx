@@ -7,7 +7,9 @@ import { RootState } from "../store";
 import { NavLink } from "react-bootstrap";
 
 export default function AccountNavigation() {
-  const { currentUser } = useSelector((state: RootState) => state.accountReducer);
+  const { currentUser } = useSelector((state: RootState) => state.accountReducer) as {
+    currentUser: any;
+  };
   const links = currentUser ? ["Profile", "Users"] : ["Signin", "Signup"];
   const pathname = usePathname();
 
