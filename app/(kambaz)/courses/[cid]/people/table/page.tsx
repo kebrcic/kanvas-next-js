@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 "use client";
@@ -9,12 +10,22 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../../store";
 import * as courseClient from "../../../client";
 import * as accountClient from "../../../../account/client";
+import PeopleDetails from "../Details";
+import Link from "next/link";
 
-export default function PeopleTable() {
+export default function PeopleTable({
+  userss = [],
+  fetchUsers,
+}: {
+  userss?: any[];
+  fetchUsers: () => void;
+}) {
   const { cid } = useParams();
   const [users, setUsers] = useState<any[]>([]);
   const [editingUser, setEditingUser] = useState<any>(null);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
+  const [showUserId, setShowUserId] = useState<string | null>(null);
   const [newUser, setNewUser] = useState<any>({
     username: "",
     password: "",
@@ -88,6 +99,15 @@ export default function PeopleTable() {
 
   return (
     <div id="wd-people-table">
+      {showDetails && (
+        <PeopleDetails
+          uid={showUserId}
+          onClose={() => {
+            setShowDetails(false);
+            fetchUsers();
+          }}
+        />
+      )}
       {isFaculty && (
         <div className="mb-3">
           <Button variant="primary" onClick={() => setShowAddForm(!showAddForm)}>
@@ -170,53 +190,55 @@ export default function PeopleTable() {
           </tr>
         </thead>
         <tbody>
-          {users.map((user: any) => (
+          {userss.map((user: any) => (
             <tr key={user._id}>
               {editingUser && editingUser._id === user._id ? (
                 <>
                   <td>
-                    <div className="d-flex gap-1">
-                      <FormControl
-                        size="sm"
-                        value={editingUser.firstName}
-                        onChange={(e) =>
-                          setEditingUser({ ...editingUser, firstName: e.target.value })
-                        }
-                      />
-                      <FormControl
-                        size="sm"
-                        value={editingUser.lastName}
-                        onChange={(e) =>
-                          setEditingUser({ ...editingUser, lastName: e.target.value })
-                        }
-                      />
-                    </div>
+                    <span
+                      className="text-decoration-none"
+                      onClick={() => {
+                        setShowDetails(true);
+                        setShowUserId(user._id);
+                      }}
+                    >
+                      <div className="d-flex gap-1">
+                        <FormControl
+                          size="sm"
+                          value={editingUser.firstName}
+                          onChange={(e) =>
+                            setEditingUser({ ...editingUser, firstName: e.target.value })
+                          }
+                        />
+                        <FormControl
+                          size="sm"
+                          value={editingUser.lastName}
+                          onChange={(e) =>
+                            setEditingUser({ ...editingUser, lastName: e.target.value })
+                          }
+                        />
+                      </div>
+                    </span>
                   </td>
                   <td>
                     <FormControl
                       size="sm"
                       value={editingUser.loginId}
-                      onChange={(e) =>
-                        setEditingUser({ ...editingUser, loginId: e.target.value })
-                      }
+                      onChange={(e) => setEditingUser({ ...editingUser, loginId: e.target.value })}
                     />
                   </td>
                   <td>
                     <FormControl
                       size="sm"
                       value={editingUser.section}
-                      onChange={(e) =>
-                        setEditingUser({ ...editingUser, section: e.target.value })
-                      }
+                      onChange={(e) => setEditingUser({ ...editingUser, section: e.target.value })}
                     />
                   </td>
                   <td>
                     <FormSelect
                       size="sm"
                       value={editingUser.role}
-                      onChange={(e) =>
-                        setEditingUser({ ...editingUser, role: e.target.value })
-                      }
+                      onChange={(e) => setEditingUser({ ...editingUser, role: e.target.value })}
                     >
                       <option value="STUDENT">STUDENT</option>
                       <option value="FACULTY">FACULTY</option>
@@ -237,9 +259,18 @@ export default function PeopleTable() {
               ) : (
                 <>
                   <td className="wd-full-name text-nowrap">
-                    <FaUserCircle className="me-2 fs-1 text-secondary" />
-                    <span className="wd-first-name">{user.firstName}</span>{" "}
-                    <span className="wd-last-name">{user.lastName}</span>
+                    <span
+                      className="text-decoration-none"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        setShowDetails(true);
+                        setShowUserId(user._id);
+                      }}
+                    >
+                      <FaUserCircle className="me-2 fs-1 text-secondary" />
+                      <span className="wd-first-name">{user.firstName}</span>{" "}
+                      <span className="wd-last-name">{user.lastName}</span>
+                    </span>
                   </td>
                   <td className="wd-login-id">{user.loginId}</td>
                   <td className="wd-section">{user.section}</td>
@@ -256,11 +287,7 @@ export default function PeopleTable() {
                       >
                         Edit
                       </Button>
-                      <Button
-                        size="sm"
-                        variant="danger"
-                        onClick={() => handleDeleteUser(user._id)}
-                      >
+                      <Button size="sm" variant="danger" onClick={() => handleDeleteUser(user._id)}>
                         Delete
                       </Button>
                     </td>
