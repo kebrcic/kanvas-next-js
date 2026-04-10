@@ -190,7 +190,7 @@ export default function PeopleTable({
           </tr>
         </thead>
         <tbody>
-          {userss.map((user: any) => (
+          {(userss.length > 0 ? userss : users).map((user: any) => (
             <tr key={user._id}>
               {editingUser && editingUser._id === user._id ? (
                 <>

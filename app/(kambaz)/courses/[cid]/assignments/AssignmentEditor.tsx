@@ -106,7 +106,7 @@ export default function AssignmentEditor({
                   </FormLabel>
                   <FormControl
                     type="date"
-                    name="available_until_date"
+                    name="available_to_date"
                     value={formData.available_to_date}
                     onChange={handleChange}
                   />

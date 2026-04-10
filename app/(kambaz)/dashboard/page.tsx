@@ -107,7 +107,7 @@ export default function Dashboard() {
           className="btn-primary"
           onClick={() => setShowAllCourses(!showAllCourses)}
         >
-          Enrollments
+          {showAllCourses ? "My Courses" : "All Courses"}
         </Button>
       </div>
 

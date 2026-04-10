@@ -177,7 +177,11 @@ export default function AssignmentEditor() {
           Until
         </FormLabel>
         <Col sm={4}>
-          <FormControl type="date" id="wd-until-date" defaultValue={assignment?.available_to_date} />
+          <FormControl
+            type="date"
+            id="wd-until-date"
+            defaultValue={assignment?.available_to_date}
+          />
         </Col>
       </Row>
 
