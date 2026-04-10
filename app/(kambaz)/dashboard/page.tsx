@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/jsx-key */
 
@@ -17,10 +18,8 @@ import {
   FormControl,
 } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { addNewCourse, updateCourse, deleteCourse } from "../courses/reducer";
 import { RootState } from "../store";
 import { setCourses } from "../courses/reducer";
-import { setEnrollments } from "../enrollments/reducer";
 import * as client from "../courses/client";
 
 export default function Dashboard() {
@@ -29,9 +28,9 @@ export default function Dashboard() {
   const { currentUser } = useSelector((state: RootState) => state.accountReducer) as {
     currentUser: { _id: string; role?: string } | null;
   };
-  const { enrollments } = useSelector((state: RootState) => state.enrollmentsReducer);
   const dispatch = useDispatch();
   const [showAllCourses, setShowAllCourses] = useState(false);
+  const [enrolledCourseIds, setEnrolledCourseIds] = useState<string[]>([]);
   const [course, setCourse] = useState<any>({
     _id: "0",
     name: "New Course",
@@ -44,34 +43,25 @@ export default function Dashboard() {
 
   const fetchCourses = async () => {
     try {
-      const courses = showAllCourses
-        ? await client.fetchAllCourses()
-        : await client.findMyCourses();
+      const myCourses = await client.findMyCourses();
+      setEnrolledCourseIds(myCourses.filter((c: any) => c).map((c: any) => c._id));
+      const courses = showAllCourses ? await client.fetchAllCourses() : myCourses;
       dispatch(setCourses(courses));
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  const fetchEnrollments = async () => {
-    try {
-      const enrollments = await client.findEnrollmentsForUser();
-      dispatch(setEnrollments(enrollments));
     } catch (error) {
       console.error(error);
     }
   };
   const onEnroll = async (courseId: string) => {
     await client.enrollUserInCourse(courseId);
-    fetchEnrollments();
+    fetchCourses();
   };
   const onUnenroll = async (courseId: string) => {
     await client.unenrollUserFromCourse(courseId);
-    fetchEnrollments();
+    fetchCourses();
   };
   useEffect(() => {
     if (currentUser) {
       fetchCourses();
-      fetchEnrollments();
     }
   }, [currentUser, showAllCourses]);
 
@@ -102,15 +92,11 @@ export default function Dashboard() {
 
   const isFacultyOrTA = currentUser?.role === "FACULTY" || currentUser?.role === "TA";
 
-  const isEnrolled = (courseId: string) =>
-    enrollments.some(
-      (enrollment: any) =>
-        currentUser && enrollment.user === currentUser._id && enrollment.course === courseId,
-    );
+  const isEnrolled = (courseId: string) => enrolledCourseIds.includes(courseId);
 
   const displayedCourses = showAllCourses
-    ? courses
-    : courses.filter((course: any) => isEnrolled(course._id));
+    ? courses.filter((course: any) => course)
+    : courses.filter((course: any) => course && isEnrolled(course._id));
 
   return (
     <div id="wd-dashboard">

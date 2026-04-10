@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import {
   FormLabel,
@@ -9,15 +10,26 @@ import {
   Col,
   FormCheck,
 } from "react-bootstrap";
-import * as db from "../../../../database";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import * as courseClient from "../../../client";
 
 export default function AssignmentEditor() {
-  const { cid } = useParams();
-  const { aid } = useParams();
-  const assignments = db.assignments;
-  const currAssignment = assignments.find((assignment) => assignment._id === aid);
+  const { cid, aid } = useParams();
+  const [assignment, setAssignment] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchAssignment = async () => {
+      const assignments = await courseClient.findAssignmentsForCourse(cid as string);
+      const found = assignments.find((a: any) => a._id === aid);
+      setAssignment(found);
+    };
+    fetchAssignment();
+  }, [cid, aid]);
+
+  if (!assignment) return null;
+
   return (
     <Container id="wd-assignments-editor" className="p-4">
       {/* Assignment Name Section */}
@@ -25,7 +37,7 @@ export default function AssignmentEditor() {
         <h6>
           <FormLabel htmlFor="wd-name">Assignment Name</FormLabel>
         </h6>
-        <FormControl id="wd-name" defaultValue={currAssignment?.title} />
+        <FormControl id="wd-name" defaultValue={assignment?.title} />
       </div>
 
       {/* Description Section */}
@@ -34,7 +46,7 @@ export default function AssignmentEditor() {
           as="textarea"
           id="wd-description"
           rows={5}
-          defaultValue={currAssignment?.description}
+          defaultValue={assignment?.description}
         />
       </div>
 
@@ -47,7 +59,7 @@ export default function AssignmentEditor() {
           Points
         </FormLabel>
         <Col sm={9}>
-          <FormControl type="number" defaultValue={currAssignment?.points} />
+          <FormControl type="number" defaultValue={assignment?.points} />
         </Col>
       </Row>
 
@@ -145,7 +157,7 @@ export default function AssignmentEditor() {
           Due
         </FormLabel>
         <Col sm={9}>
-          <FormControl type="date" defaultValue={currAssignment?.due_date} id="wd-due-date" />
+          <FormControl type="date" defaultValue={assignment?.due_date} id="wd-due-date" />
         </Col>
       </Row>
 
@@ -158,14 +170,14 @@ export default function AssignmentEditor() {
           <FormControl
             type="date"
             id="wd-from-date"
-            defaultValue={currAssignment?.available_from_date}
+            defaultValue={assignment?.available_from_date}
           />
         </Col>
         <FormLabel column sm={1} className="text-sm-end">
           Until
         </FormLabel>
         <Col sm={4}>
-          <FormControl type="date" id="wd-until-date" defaultValue="" />
+          <FormControl type="date" id="wd-until-date" defaultValue={assignment?.available_to_date} />
         </Col>
       </Row>
 
@@ -178,7 +190,6 @@ export default function AssignmentEditor() {
         <Link href={`/courses/${cid}/assignments`}>
           <Button variant="light">Cancel</Button>
         </Link>
-        {/* Using 'danger' variant to match the red 'Save' button in the image */}
         <Link href={`/courses/${cid}/assignments`}>
           <Button variant="danger">Save</Button>
         </Link>

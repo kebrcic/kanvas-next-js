@@ -1,5 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Modal, Form, Button, Row, Col } from "react-bootstrap";
+import {
+  Modal,
+  Form,
+  Button,
+  Row,
+  Col,
+  FormControl,
+  FormLabel,
+  ModalBody,
+  ModalFooter,
+  FormGroup,
+  ModalHeader,
+  ModalTitle,
+} from "react-bootstrap";
 import { AssignmentData } from "./page";
 
 export default function AssignmentEditor({
@@ -25,27 +38,27 @@ export default function AssignmentEditor({
 
   return (
     <Modal show={show} onHide={handleClose} size="lg">
-      <Modal.Header closeButton>
-        <Modal.Title>{dialogTitle}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
+      <ModalHeader closeButton>
+        <ModalTitle>{dialogTitle}</ModalTitle>
+      </ModalHeader>
+      <ModalBody>
         <Form>
           {/* Assignment Name */}
-          <Form.Group className="mb-3">
-            <Form.Label>Assignment Name</Form.Label>
-            <Form.Control name="title" value={formData.title} onChange={handleChange} />
-          </Form.Group>
+          <FormGroup className="mb-3">
+            <FormLabel>Assignment Name</FormLabel>
+            <FormControl name="title" value={formData.title} onChange={handleChange} />
+          </FormGroup>
 
           {/* Description */}
-          <Form.Group className="mb-3">
-            <Form.Control
+          <FormGroup className="mb-3">
+            <FormControl
               as="textarea"
               rows={3}
               name="description"
               value={formData.description}
               onChange={handleChange}
             />
-          </Form.Group>
+          </FormGroup>
 
           {/* Points */}
           <Row className="mb-3">
@@ -53,7 +66,7 @@ export default function AssignmentEditor({
               Points
             </Col>
             <Col xs={8}>
-              <Form.Control name="points" value={formData.points} onChange={handleChange} />
+              <FormControl name="points" value={formData.points} onChange={handleChange} />
             </Col>
           </Row>
 
@@ -63,24 +76,24 @@ export default function AssignmentEditor({
               Assign
             </Col>
             <Col xs={8} className="border p-3 rounded">
-              <Form.Group className="mb-2">
-                <Form.Label>
+              <FormGroup className="mb-2">
+                <FormLabel>
                   <b>Due</b>
-                </Form.Label>
-                <Form.Control
+                </FormLabel>
+                <FormControl
                   type="date"
                   name="due_date"
                   value={formData.due_date}
                   onChange={handleChange}
                 />
-              </Form.Group>
+              </FormGroup>
 
               <Row>
                 <Col>
-                  <Form.Label>
+                  <FormLabel>
                     <b>Available from</b>
-                  </Form.Label>
-                  <Form.Control
+                  </FormLabel>
+                  <FormControl
                     type="date"
                     name="available_from_date"
                     value={formData.available_from_date}
@@ -88,10 +101,10 @@ export default function AssignmentEditor({
                   />
                 </Col>
                 <Col>
-                  <Form.Label>
+                  <FormLabel>
                     <b>Until</b>
-                  </Form.Label>
-                  <Form.Control
+                  </FormLabel>
+                  <FormControl
                     type="date"
                     name="available_until_date"
                     value={formData.available_to_date}
@@ -102,8 +115,8 @@ export default function AssignmentEditor({
             </Col>
           </Row>
         </Form>
-      </Modal.Body>
-      <Modal.Footer>
+      </ModalBody>
+      <ModalFooter>
         <Button variant="secondary" onClick={handleClose}>
           Cancel
         </Button>
@@ -116,7 +129,7 @@ export default function AssignmentEditor({
         >
           Save
         </Button>
-      </Modal.Footer>
+      </ModalFooter>
     </Modal>
   );
 }

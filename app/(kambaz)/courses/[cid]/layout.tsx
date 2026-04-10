@@ -9,6 +9,7 @@ import Breadcrumb from "./Breadcrumb";
 import { useParams, useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import * as courseClient from "../../courses/client";
 
 export default function CoursesLayout({ children }: Readonly<{ children: ReactNode }>) {
   const router = useRouter();
@@ -18,24 +19,30 @@ export default function CoursesLayout({ children }: Readonly<{ children: ReactNo
   const { currentUser } = useSelector((state: RootState) => state.accountReducer) as {
     currentUser: { _id: string } | null;
   };
-  const { enrollments } = useSelector((state: RootState) => state.enrollmentsReducer);
 
   const course = courses.find((course: any) => course._id === cid);
   const [showNavigation, setShowNavigation] = useState(true);
-
-  const isEnrolled = enrollments.some(
-    (enrollment: any) => enrollment.user === currentUser?._id && enrollment.course === cid,
-  );
+  const [isEnrolled, setIsEnrolled] = useState<boolean | null>(null);
 
   useEffect(() => {
-    if (currentUser && !isEnrolled) {
-      router.push("/dashboard");
+    const checkEnrollment = async () => {
+      try {
+        const myCourses = await courseClient.findMyCourses();
+        const enrolled = myCourses.some((c: any) => c && c._id === cid);
+        setIsEnrolled(enrolled);
+        if (currentUser && !enrolled) {
+          router.push("/dashboard");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    if (currentUser) {
+      checkEnrollment();
     }
-  }, [currentUser, isEnrolled, router]);
+  }, [currentUser, cid, router]);
 
-  if (currentUser && !isEnrolled) return null;
-
-  if (!isEnrolled) return null;
+  if (isEnrolled === null || !isEnrolled) return null;
 
   return (
     <div id="wd-courses">
